@@ -17,27 +17,36 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 234 89% 74%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand colors inspired by Skill-IT logo */
+    --primary: 33 100% 50%; /* Orange from logo */
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 40% 96.1%;
+    --muted: 220 14% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 268 83% 58%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 195 100% 50%; /* Blue from logo */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 234 89% 74%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 33 100% 50%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
+    /* Brand-specific colors */
+    --brand-orange: 33 100% 50%;
+    --brand-orange-light: 33 100% 60%;
+    --brand-orange-dark: 33 100% 40%;
+    --brand-blue: 195 100% 50%;
+    --brand-blue-light: 195 100% 60%;
+    --brand-blue-dark: 195 100% 40%;
+    
     /* Premium color palette */
     --premium: 270 91% 65%;
     --premium-foreground: 0 0% 100%;
@@ -49,16 +58,21 @@ All colors MUST be HSL.
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(234 89% 74%), hsl(268 83% 58%));
+    /* Brand gradients inspired by logo */
+    --gradient-primary: linear-gradient(135deg, hsl(33 100% 50%), hsl(195 100% 50%));
+    --gradient-brand: linear-gradient(135deg, hsl(33 100% 50%), hsl(33 100% 60%));
+    --gradient-accent: linear-gradient(135deg, hsl(195 100% 50%), hsl(195 100% 60%));
+    --gradient-hero: linear-gradient(135deg, hsl(33 100% 50%), hsl(195 100% 50%), hsl(270 91% 65%));
+    --gradient-card: linear-gradient(135deg, hsl(33 100% 95%), hsl(195 100% 95%));
     --gradient-premium: linear-gradient(135deg, hsl(270 91% 65%), hsl(268 83% 58%));
     --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(160 84% 39%));
-    --gradient-hero: linear-gradient(135deg, hsl(234 89% 74%), hsl(268 83% 58%), hsl(270 91% 65%));
     
-    /* Shadows */
+    /* Brand shadows */
+    --shadow-brand: 0 20px 60px -12px hsl(33 100% 50% / 0.25);
+    --shadow-accent: 0 20px 60px -12px hsl(195 100% 50% / 0.25);
+    --shadow-glow: 0 0 40px hsl(33 100% 50% / 0.3);
+    --shadow-elevation: 0 10px 30px -10px hsl(33 100% 50% / 0.15);
     --shadow-premium: 0 20px 60px -12px hsl(270 91% 65% / 0.25);
-    --shadow-glow: 0 0 40px hsl(270 100% 80% / 0.3);
-    --shadow-elevation: 0 10px 30px -10px hsl(234 89% 74% / 0.2);
     
     /* Animations */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);

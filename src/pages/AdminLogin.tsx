@@ -40,7 +40,8 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden"
+         style={{ background: 'linear-gradient(135deg, hsl(222 84% 5%), hsl(270 91% 15%), hsl(222 84% 5%))' }}>
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="w-full h-full bg-repeat" style={{
@@ -57,8 +58,8 @@ const AdminLogin = () => {
         <div className="w-full max-w-md space-y-8 animate-fade-in">
           {/* Header Section */}
           <div className="text-center space-y-4">
-            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-slate-800 to-purple-800 rounded-2xl flex items-center justify-center shadow-2xl animate-scale-in border border-purple-500/20">
-              <Shield className="w-8 h-8 text-purple-400" />
+            <div className="mx-auto w-20 h-20 bg-slate-800 rounded-2xl flex items-center justify-center shadow-2xl animate-scale-in border border-purple-500/20">
+              <img src="/lovable-uploads/28853c5c-d089-4b72-8e98-d1916c208b25.png" alt="Skill-IT Logo" className="w-12 h-12 object-contain opacity-80" />
             </div>
             <div>
               <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Admin Portal</h1>

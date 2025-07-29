@@ -52,6 +52,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Brand colors from Skill-IT logo
+				brand: {
+					orange: 'hsl(var(--brand-orange))',
+					'orange-light': 'hsl(var(--brand-orange-light))',
+					'orange-dark': 'hsl(var(--brand-orange-dark))',
+					blue: 'hsl(var(--brand-blue))',
+					'blue-light': 'hsl(var(--brand-blue-light))',
+					'blue-dark': 'hsl(var(--brand-blue-dark))'
+				},
 				premium: {
 					DEFAULT: 'hsl(var(--premium))',
 					foreground: 'hsl(var(--premium-foreground))',
@@ -107,7 +116,9 @@ export default {
 				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
 				'scale-in': 'scale-in 0.5s ease-out',
 				'fade-in': 'fade-in 0.6s ease-out',
-				'slide-up': 'slide-up 0.5s ease-out'
+				'slide-up': 'slide-up 0.5s ease-out',
+				'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
+				'glow': 'glow 2s ease-in-out infinite alternate'
 			},
 			keyframes: {
 				'gradient': {
@@ -133,6 +144,14 @@ export default {
 				'slide-up': {
 					'0%': { transform: 'translateY(100%)' },
 					'100%': { transform: 'translateY(0)' }
+				},
+				'bounce-subtle': {
+					'0%, 100%': { transform: 'translateY(-5%)' },
+					'50%': { transform: 'translateY(0)' }
+				},
+				'glow': {
+					'0%': { boxShadow: '0 0 20px hsl(var(--brand-orange) / 0.3)' },
+					'100%': { boxShadow: '0 0 40px hsl(var(--brand-orange) / 0.6), 0 0 60px hsl(var(--brand-blue) / 0.3)' }
 				}
 			}
 		}

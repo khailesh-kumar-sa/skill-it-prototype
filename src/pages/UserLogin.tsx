@@ -59,7 +59,8 @@ const UserLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-accent to-premium relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-accent to-premium relative overflow-hidden"
+         style={{ background: 'var(--gradient-hero)' }}>
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-20">
         <div className="w-full h-full bg-repeat" style={{
@@ -76,8 +77,8 @@ const UserLogin = () => {
         <div className="w-full max-w-md space-y-8 animate-fade-in">
           {/* Header Section */}
           <div className="text-center space-y-4">
-            <div className="mx-auto w-20 h-20 bg-card rounded-2xl flex items-center justify-center shadow-2xl animate-scale-in border border-border/20">
-              <User className="w-8 h-8 text-primary" />
+            <div className="mx-auto w-20 h-20 bg-card rounded-2xl flex items-center justify-center shadow-2xl animate-scale-in border border-border/20 animate-glow">
+              <img src="/lovable-uploads/28853c5c-d089-4b72-8e98-d1916c208b25.png" alt="Skill-IT Logo" className="w-12 h-12 object-contain" />
             </div>
             <div>
               <h1 className="text-4xl font-bold text-primary-foreground mb-2 tracking-tight">Skill It</h1>
