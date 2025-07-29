@@ -235,52 +235,101 @@ const InterviewTrainer = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="text-sm font-medium text-card-foreground mb-2 block">Category</label>
-                <div className="flex space-x-2">
+            <div className="space-y-6">
+              {/* Step 1: Category Selection */}
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                  <label className="text-lg font-semibold text-card-foreground">Choose Interview Category</label>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 ml-10">
                   {Object.keys(questionCategories).map((cat) => (
                     <Button
                       key={cat}
                       variant={category === cat ? "default" : "outline"}
-                      size="sm"
+                      size="lg"
                       onClick={() => setCategory(cat)}
-                      className="capitalize"
+                      className="capitalize text-left justify-start h-auto p-4 flex flex-col items-start space-y-1"
                     >
-                      {cat}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <label className="text-sm font-medium text-card-foreground mb-2 block">Difficulty</label>
-                <div className="flex space-x-2">
-                  {Object.keys(difficultySettings).map((diff) => (
-                    <Button
-                      key={diff}
-                      variant={difficulty === diff ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setDifficulty(diff as typeof difficulty)}
-                      className="capitalize"
-                    >
-                      {diff}
+                      <span className="font-semibold">{cat}</span>
+                      <span className="text-xs opacity-70">
+                        {cat === 'general' ? 'Basic interview questions' : 
+                         cat === 'technical' ? 'Tech-specific questions' : 
+                         'Situational questions'}
+                      </span>
                     </Button>
                   ))}
                 </div>
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-card-foreground mb-2 block">Audio</label>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setAudioEnabled(!audioEnabled)}
-                  className="flex items-center space-x-2"
-                >
-                  {audioEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-                  <span>{audioEnabled ? 'Enabled' : 'Disabled'}</span>
-                </Button>
+              {/* Step 2: Difficulty Level */}
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                  <label className="text-lg font-semibold text-card-foreground">Select Difficulty Level</label>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 ml-10">
+                  {Object.keys(difficultySettings).map((diff) => (
+                    <Button
+                      key={diff}
+                      variant={difficulty === diff ? "default" : "outline"}
+                      size="lg"
+                      onClick={() => setDifficulty(diff as typeof difficulty)}
+                      className="capitalize text-left justify-start h-auto p-4 flex flex-col items-start space-y-1"
+                    >
+                      <span className="font-semibold">{diff}</span>
+                      <span className="text-xs opacity-70">
+                        {difficultySettings[diff as keyof typeof difficultySettings].time}s time limit
+                      </span>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Step 3: Audio Settings */}
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-secondary text-secondary-foreground rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                  <label className="text-lg font-semibold text-card-foreground">Audio Preferences</label>
+                </div>
+                <div className="ml-10">
+                  <Button
+                    variant={audioEnabled ? "default" : "outline"}
+                    size="lg"
+                    onClick={() => setAudioEnabled(!audioEnabled)}
+                    className="flex items-center space-x-3 h-auto p-4"
+                  >
+                    {audioEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+                    <div className="text-left">
+                      <div className="font-semibold">{audioEnabled ? 'Audio Enabled' : 'Audio Disabled'}</div>
+                      <div className="text-xs opacity-70">
+                        {audioEnabled ? 'You will hear question prompts' : 'Silent mode - text only'}
+                      </div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Settings Summary */}
+              <div className="mt-6 p-4 bg-muted/50 rounded-lg border border-border/50">
+                <div className="flex items-center space-x-2 mb-3">
+                  <Target className="w-5 h-5 text-primary" />
+                  <span className="font-semibold text-card-foreground">Current Settings</span>
+                </div>
+                <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Category:</span>
+                    <div className="font-medium capitalize">{category}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Difficulty:</span>
+                    <div className="font-medium capitalize">{difficulty}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Audio:</span>
+                    <div className="font-medium">{audioEnabled ? 'On' : 'Off'}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>
