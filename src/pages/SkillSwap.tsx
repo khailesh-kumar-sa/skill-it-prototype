@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import BottomNavigation from "@/components/BottomNavigation";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { Search, Star, Users, Clock, MessageSquare, CheckCircle, XCircle } from "lucide-react";
 
 const SkillSwap = () => {
