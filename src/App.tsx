@@ -4,6 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./components/AuthProvider";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import UserLogin from "./pages/UserLogin";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -19,24 +21,26 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<UserLogin />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/subscription" element={<Subscription />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/career-test" element={<CareerTest />} />
-          <Route path="/skill-swap" element={<SkillSwap />} />
-          <Route path="/interview-trainer" element={<InterviewTrainer />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<UserLogin />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
+            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/career-test" element={<ProtectedRoute><CareerTest /></ProtectedRoute>} />
+            <Route path="/skill-swap" element={<ProtectedRoute><SkillSwap /></ProtectedRoute>} />
+            <Route path="/interview-trainer" element={<ProtectedRoute><InterviewTrainer /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
