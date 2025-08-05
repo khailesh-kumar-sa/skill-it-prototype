@@ -6,10 +6,12 @@ export interface AuthContextType {
   user: User | null
   session: Session | null
   loading: boolean
+  needsProfileSetup: boolean
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signUp: (email: string, password: string) => Promise<{ error: any }>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<{ error: any }>
+  updateProfile: (profileData: any) => Promise<{ error: any }>
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -26,6 +28,7 @@ export const useAuthState = () => {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [needsProfileSetup, setNeedsProfileSetup] = useState(false)
 
   useEffect(() => {
     // Get initial session
@@ -33,6 +36,13 @@ export const useAuthState = () => {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
+      
+      // Check if user needs profile setup (new users)
+      if (session?.user) {
+        const userMetadata = session.user.user_metadata;
+        const hasProfile = userMetadata?.name || userMetadata?.role;
+        setNeedsProfileSetup(!hasProfile);
+      }
     })
 
     // Listen for auth changes
@@ -42,6 +52,15 @@ export const useAuthState = () => {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
+      
+      // Check profile setup for new sessions
+      if (session?.user) {
+        const userMetadata = session.user.user_metadata;
+        const hasProfile = userMetadata?.name || userMetadata?.role;
+        setNeedsProfileSetup(!hasProfile);
+      } else {
+        setNeedsProfileSetup(false);
+      }
     })
 
     return () => subscription.unsubscribe()
@@ -72,13 +91,25 @@ export const useAuthState = () => {
     return { error }
   }
 
+  const updateProfile = async (profileData: any) => {
+    const { error } = await supabase.auth.updateUser({
+      data: profileData
+    })
+    if (!error) {
+      setNeedsProfileSetup(false);
+    }
+    return { error }
+  }
+
   return {
     user,
     session,
     loading,
+    needsProfileSetup,
     signIn,
     signUp,
     signOut,
     resetPassword,
+    updateProfile,
   }
 }
