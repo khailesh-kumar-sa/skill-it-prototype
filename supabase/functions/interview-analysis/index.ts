@@ -26,11 +26,15 @@ serve(async (req) => {
 
     // First, transcribe the audio
     console.log('Transcribing audio...');
+    console.log('Audio data length:', audio.length);
+    
     const binaryAudio = Uint8Array.from(atob(audio), c => c.charCodeAt(0));
+    console.log('Binary audio length:', binaryAudio.length);
     
     const formData = new FormData();
-    const blob = new Blob([binaryAudio], { type: 'audio/wav' });
-    formData.append('file', blob, 'audio.wav');
+    // Use webm format as that's what the browser actually records
+    const blob = new Blob([binaryAudio], { type: 'audio/webm' });
+    formData.append('file', blob, 'audio.webm');
     formData.append('model', 'whisper-1');
 
     const transcribeResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
