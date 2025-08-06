@@ -278,26 +278,56 @@ const Profile = () => {
 
         <Card className="mb-6 animate-scale-in">
           <CardHeader>
-            <CardTitle className="text-lg font-bold text-gray-800">Premium Features</CardTitle>
-            <CardDescription>Unlock advanced AI capabilities</CardDescription>
+            <CardTitle className="text-lg font-bold text-gray-800">Premium Plans</CardTitle>
+            <CardDescription>Choose the plan that best fits your needs</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-700">Advanced AI Career Analysis</span>
-                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">PREMIUM</span>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="p-3 border border-orange-200 bg-orange-50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-gray-800">Premium Plan</span>
+                  <span className="text-sm bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-medium">₹500/month</span>
+                </div>
+                <div className="text-sm text-gray-600">Best for final year students & freshers</div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-700">Unlimited Skill Swaps</span>
-                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">PREMIUM</span>
+              
+              <div className="p-3 border border-purple-200 bg-purple-50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-gray-800">Special Plan 1</span>
+                  <span className="text-sm bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-medium">₹250/month</span>
+                </div>
+                <div className="text-sm text-gray-600">Unlimited AI Interview Training</div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-700">Voice Analysis & Feedback</span>
-                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">PREMIUM</span>
+              
+              <div className="p-3 border border-teal-200 bg-teal-50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-gray-800">Special Plan 2</span>
+                  <span className="text-sm bg-teal-100 text-teal-800 px-2 py-1 rounded-full font-medium">₹250/month</span>
+                </div>
+                <div className="text-sm text-gray-600">Unlimited Skill Swapping</div>
+              </div>
+              
+              <div className="p-3 border border-emerald-200 bg-emerald-50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-gray-800">Special Plan 3</span>
+                  <span className="text-sm bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full font-medium">₹150/month</span>
+                </div>
+                <div className="text-sm text-gray-600">Dashboard Access for HR's & employers</div>
+              </div>
+              
+              <div className="p-3 border border-gray-200 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-gray-800">Free Plan</span>
+                  <span className="text-sm bg-gray-100 text-gray-800 px-2 py-1 rounded-full font-medium">₹0/month</span>
+                </div>
+                <div className="text-sm text-gray-600">Basic features for college students</div>
               </div>
             </div>
-            <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600">
-              Upgrade to Premium - $19/month
+            <Button 
+              onClick={() => navigate('/subscription')}
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
+            >
+              View All Plans & Subscribe
             </Button>
           </CardContent>
         </Card>
