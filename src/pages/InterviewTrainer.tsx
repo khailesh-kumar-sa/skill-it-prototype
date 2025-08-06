@@ -202,25 +202,36 @@ const InterviewTrainer = () => {
     }
 
     try {
-      const response = await supabase.functions.invoke('generate-question', {
-        body: {
-          role: selectedRole,
-          difficulty: difficulty
-        }
-      });
-
-      if (response.error) {
-        throw new Error('Failed to generate question');
+      // Import the interview questions data
+      const { interviewQuestions } = await import('@/data/interviewQuestions');
+      
+      const roleQuestions = interviewQuestions[selectedRole];
+      if (!roleQuestions) {
+        throw new Error('No questions found for this role');
       }
 
-      const data = response.data;
-      setAiQuestion(data.question);
-      setAiAnswer(data.idealAnswer);
+      // Get questions for the selected difficulty
+      const questions = roleQuestions[difficulty];
+      if (!questions || questions.length === 0) {
+        throw new Error('No questions found for this difficulty level');
+      }
+
+      // Select a random question
+      const randomIndex = Math.floor(Math.random() * questions.length);
+      const selectedQuestion = questions[randomIndex];
+
+      setAiQuestion(selectedQuestion.question);
+      setAiAnswer(selectedQuestion.idealAnswer);
       setHasRecorded(false);
       setShowFeedback(false);
       setRecordingTime(0);
       setRecordedAudio(null);
       setEnhancedFeedback(null);
+
+      toast({
+        title: "Question Generated!",
+        description: "Read the question carefully and prepare your answer",
+      });
     } catch (error) {
       toast({
         title: "Error",

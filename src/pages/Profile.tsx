@@ -5,11 +5,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import BottomNavigation from "@/components/BottomNavigation";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const Profile = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [profile, setProfile] = useState({
     name: "John Doe",
     email: "john.doe@example.com",
@@ -32,6 +39,26 @@ const Profile = () => {
   const handleCancel = () => {
     setEditProfile(profile);
     setIsEditing(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const { error } = await supabase.rpc('delete_user');
+      if (error) throw error;
+      
+      await signOut();
+      navigate('/');
+      toast({
+        title: "Account Deleted",
+        description: "Your account has been permanently deleted",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete account. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const stats = [
@@ -88,9 +115,10 @@ const Profile = () => {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                value={profile.email}
-                disabled
-                className="bg-gray-50"
+                value={isEditing ? editProfile.email : profile.email}
+                onChange={(e) => setEditProfile({...editProfile, email: e.target.value})}
+                disabled={!isEditing}
+                className={!isEditing ? "bg-gray-50" : ""}
               />
             </div>
 
@@ -98,9 +126,10 @@ const Profile = () => {
               <Label htmlFor="role">Role</Label>
               <Input
                 id="role"
-                value={profile.role}
-                disabled
-                className="bg-gray-50"
+                value={isEditing ? editProfile.role : profile.role}
+                onChange={(e) => setEditProfile({...editProfile, role: e.target.value})}
+                disabled={!isEditing}
+                className={!isEditing ? "bg-gray-50" : ""}
               />
             </div>
 
@@ -186,7 +215,42 @@ const Profile = () => {
             </p>
           </CardContent>
         </Card>
+
+        <Card className="mb-6 border-red-200 bg-red-50">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold text-red-800">Danger Zone</CardTitle>
+            <CardDescription className="text-red-600">
+              This action cannot be undone. This will permanently delete your account and all associated data.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              onClick={() => setShowDeleteDialog(true)}
+              variant="destructive"
+              className="w-full"
+            >
+              Delete Account Permanently
+            </Button>
+          </CardContent>
+        </Card>
       </div>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteAccount} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete Account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       <BottomNavigation />
     </div>
