@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProfileSetupProps {
   onComplete: (profile: ProfileData) => void;
@@ -47,7 +48,7 @@ const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
     'Freelance Developer'
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!profile.name || !profile.role) {
@@ -59,11 +60,34 @@ const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
       return;
     }
 
-    onComplete(profile);
-    toast({
-      title: "Profile Created!",
-      description: "Welcome to your personalized career journey",
-    });
+    try {
+      // Save profile to database
+      const { error } = await supabase
+        .from('profiles')
+        .insert({
+          user_id: user?.id,
+          name: profile.name,
+          role: profile.role,
+          interests: profile.interests,
+          bio: profile.bio,
+          email: user?.email
+        });
+
+      if (error) throw error;
+
+      onComplete(profile);
+      toast({
+        title: "Profile Created!",
+        description: "Welcome to your personalized career journey",
+      });
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save profile. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (

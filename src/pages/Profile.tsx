@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,22 +18,101 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "Software Developer",
-    interests: "React, Python, Machine Learning, UI/UX Design",
-    bio: "Passionate software developer with 3+ years of experience building web applications. Always eager to learn new technologies and share knowledge with the community."
+    name: "",
+    email: "",
+    role: "",
+    interests: "",
+    bio: ""
   });
+  
+  const [loading, setLoading] = useState(true);
 
   const [editProfile, setEditProfile] = useState(profile);
 
-  const handleSave = () => {
-    setProfile(editProfile);
-    setIsEditing(false);
-    toast({
-      title: "Profile Updated!",
-      description: "Your changes have been saved successfully",
-    });
+  // Load user profile from database
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          throw error;
+        }
+
+        if (data) {
+          const profileData = {
+            name: data.name || "",
+            email: data.email || user.email || "",
+            role: data.role || "",
+            interests: data.interests || "",
+            bio: data.bio || ""
+          };
+          setProfile(profileData);
+          setEditProfile(profileData);
+        } else {
+          // Set email from user if no profile exists
+          const defaultProfile = {
+            name: "",
+            email: user.email || "",
+            role: "",
+            interests: "",
+            bio: ""
+          };
+          setProfile(defaultProfile);
+          setEditProfile(defaultProfile);
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load profile data",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [user, toast]);
+
+  const handleSave = async () => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          user_id: user.id,
+          name: editProfile.name,
+          role: editProfile.role,
+          interests: editProfile.interests,
+          bio: editProfile.bio,
+          email: editProfile.email
+        });
+
+      if (error) throw error;
+
+      setProfile(editProfile);
+      setIsEditing(false);
+      toast({
+        title: "Profile Updated!",
+        description: "Your changes have been saved successfully",
+      });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update profile. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleCancel = () => {
@@ -68,6 +147,17 @@ const Profile = () => {
     { label: "Career Score", value: "78%", color: "text-orange-600" }
   ];
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 pb-20">
+        <div className="p-6 flex items-center justify-center h-64">
+          <div className="text-gray-600">Loading profile...</div>
+        </div>
+        <BottomNavigation />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 pb-20">
       <div className="p-6">
@@ -79,10 +169,14 @@ const Profile = () => {
         <Card className="mb-6 animate-scale-in">
           <CardHeader className="text-center">
             <div className="w-24 h-24 mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4">
-              {profile.name.charAt(0)}
+              {profile.name ? profile.name.charAt(0).toUpperCase() : '?'}
             </div>
-            <CardTitle className="text-xl font-bold text-gray-800">{profile.name}</CardTitle>
-            <CardDescription className="text-purple-600 font-medium">{profile.role}</CardDescription>
+            <CardTitle className="text-xl font-bold text-gray-800">
+              {profile.name || 'Complete your profile'}
+            </CardTitle>
+            <CardDescription className="text-purple-600 font-medium">
+              {profile.role || 'Set your career role'}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
