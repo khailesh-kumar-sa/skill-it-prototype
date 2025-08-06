@@ -205,15 +205,16 @@ const InterviewTrainer = () => {
       // Import the interview questions data
       const { interviewQuestions } = await import('@/data/interviewQuestions');
       
-      const roleQuestions = interviewQuestions[selectedRole];
-      if (!roleQuestions) {
+      const roleQuestions = interviewQuestions[selectedRole as keyof typeof interviewQuestions];
+      if (!roleQuestions || !Array.isArray(roleQuestions)) {
         throw new Error('No questions found for this role');
       }
 
-      // Get questions for the selected difficulty
-      const questions = roleQuestions[difficulty];
-      if (!questions || questions.length === 0) {
-        throw new Error('No questions found for this difficulty level');
+      // For now, we'll use all questions regardless of difficulty
+      // In the future, you could filter by difficulty if needed
+      const questions = roleQuestions;
+      if (questions.length === 0) {
+        throw new Error('No questions found for this role');
       }
 
       // Select a random question
@@ -233,6 +234,7 @@ const InterviewTrainer = () => {
         description: "Read the question carefully and prepare your answer",
       });
     } catch (error) {
+      console.error('Error generating question:', error);
       toast({
         title: "Error",
         description: "Failed to generate question. Please try again.",
