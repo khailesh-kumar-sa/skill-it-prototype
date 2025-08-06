@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,6 +25,7 @@ import {
   Star
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -38,20 +39,56 @@ const AdminDashboard = () => {
     navigate('/');
   };
 
-  // Mock data
-  const stats = {
-    totalUsers: 12547,
-    activeUsers: 8234,
-    newSignups: 234,
-    revenue: 156890
-  };
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    activeUsers: 0,
+    newSignups: 0,
+    revenue: 0
+  });
+  const [recentUsers, setRecentUsers] = useState([]);
 
-  const recentUsers = [
-    { id: 1, name: "Alice Johnson", email: "alice@example.com", status: "active", joinDate: "2024-01-15" },
-    { id: 2, name: "Bob Smith", email: "bob@example.com", status: "pending", joinDate: "2024-01-14" },
-    { id: 3, name: "Carol Davis", email: "carol@example.com", status: "active", joinDate: "2024-01-13" },
-    { id: 4, name: "David Wilson", email: "david@example.com", status: "inactive", joinDate: "2024-01-12" },
-  ];
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      // Fetch real user data from profiles table
+      const { data: profiles, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Calculate real stats
+      const totalUsers = profiles?.length || 0;
+      const activeUsers = profiles?.filter(profile => 
+        new Date(profile.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      ).length || 0;
+      const newSignups = profiles?.filter(profile => 
+        new Date(profile.created_at) > new Date(Date.now() - 24 * 60 * 60 * 1000)
+      ).length || 0;
+
+      setStats({
+        totalUsers,
+        activeUsers,
+        newSignups,
+        revenue: totalUsers * 29 // Estimated revenue based on subscription
+      });
+
+      // Set recent users data
+      setRecentUsers(profiles?.slice(0, 10).map(profile => ({
+        id: profile.id,
+        name: profile.name,
+        email: profile.email,
+        status: 'active',
+        joinDate: new Date(profile.created_at).toLocaleDateString()
+      })) || []);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    }
+  };
 
   const systemAlerts = [
     { id: 1, type: "warning", message: "High server load detected", time: "2 min ago" },

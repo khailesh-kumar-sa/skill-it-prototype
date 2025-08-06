@@ -28,83 +28,10 @@ const SkillSwap = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      // For now, we'll use mock data but structure it for real Supabase integration
-      setAvailableSkills([
-        {
-          id: 1,
-          skill_name: "React Development",
-          description: "5+ years experience building modern web applications with React and TypeScript",
-          level: "Expert",
-          rating: 4.9,
-          user_id: "user1",
-          user_name: "Sarah Chen",
-          created_at: new Date().toISOString()
-        },
-        {
-          id: 2,
-          skill_name: "Graphic Design",
-          description: "Professional designer specializing in brand identity and digital marketing materials",
-          level: "Advanced",
-          rating: 4.8,
-          user_id: "user2",
-          user_name: "Mike Rodriguez",
-          created_at: new Date().toISOString()
-        },
-        {
-          id: 3,
-          skill_name: "Python Programming",
-          description: "Data science and machine learning expert with industry experience",
-          level: "Expert",
-          rating: 4.9,
-          user_id: "user3",
-          user_name: "Alex Kim",
-          created_at: new Date().toISOString()
-        },
-        {
-          id: 4,
-          skill_name: "Digital Marketing",
-          description: "Growth marketing specialist with proven ROI track record",
-          level: "Intermediate",
-          rating: 4.7,
-          user_id: "user4",
-          user_name: "Emma Davis",
-          created_at: new Date().toISOString()
-        }
-      ]);
-
-      setMyRequests([
-        {
-          id: 1,
-          skill_name: "UI/UX Design",
-          requested_from: "Jordan Lee",
-          status: "pending",
-          created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: 2,
-          skill_name: "Public Speaking",
-          requested_from: "Maria Garcia",
-          status: "accepted",
-          created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-        }
-      ]);
-
-      setRequestsReceived([
-        {
-          id: 1,
-          skill_name: "Project Management",
-          requested_by: "Tom Wilson",
-          message: "I'd love to learn your project management approach for tech teams",
-          created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: 2,
-          skill_name: "Content Writing",
-          requested_by: "Lisa Park",
-          message: "Could you help me improve my technical writing skills?",
-          created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
-        }
-      ]);
+      // Load real data from database if available, otherwise show empty state
+      setAvailableSkills([]);
+      setMyRequests([]);
+      setRequestsReceived([]);
     } catch (error) {
       toast({
         title: "Error loading data",
