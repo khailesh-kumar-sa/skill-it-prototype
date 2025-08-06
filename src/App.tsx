@@ -31,24 +31,24 @@ const AppContent = () => {
     }
   };
 
-  if (needsProfileSetup) {
-    return <ProfileSetup onComplete={handleProfileComplete} />;
-  }
-
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<UserLogin />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
-        <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
-        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path="/career-test" element={<ProtectedRoute><CareerTest /></ProtectedRoute>} />
-        <Route path="/skill-swap" element={<ProtectedRoute><SkillSwap /></ProtectedRoute>} />
-        <Route path="/interview-trainer" element={<ProtectedRoute><InterviewTrainer /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      {needsProfileSetup ? (
+        <ProfileSetup onComplete={handleProfileComplete} />
+      ) : (
+        <Routes>
+          <Route path="/" element={<UserLogin />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/career-test" element={<ProtectedRoute><CareerTest /></ProtectedRoute>} />
+          <Route path="/skill-swap" element={<ProtectedRoute><SkillSwap /></ProtectedRoute>} />
+          <Route path="/interview-trainer" element={<ProtectedRoute><InterviewTrainer /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      )}
     </BrowserRouter>
   );
 };
