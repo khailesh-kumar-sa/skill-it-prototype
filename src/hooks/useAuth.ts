@@ -78,6 +78,9 @@ export const useAuthState = () => {
     const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/home`
+      }
     })
     return { error }
   }
