@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileSetupProps {
   onComplete: (profile: ProfileData) => void;
@@ -22,6 +23,7 @@ export interface ProfileData {
 
 const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<ProfileData>({
     name: '',
     role: '',
@@ -80,6 +82,7 @@ const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
         title: "Profile Created!",
         description: "Welcome to your personalized career journey",
       });
+      navigate('/subscription');
     } catch (error) {
       console.error('Error saving profile:', error);
       toast({

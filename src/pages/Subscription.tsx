@@ -87,7 +87,7 @@ const Subscription = () => {
                 onClick={() => handleSubscribe('premium')}
                 className="w-full h-10 text-sm font-semibold bg-gradient-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700"
               >
-                Upgrade to Premium
+                Start 7-Day Free Trial
               </Button>
             </CardContent>
           </Card>
