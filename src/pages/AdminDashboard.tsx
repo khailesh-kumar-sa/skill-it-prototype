@@ -90,11 +90,16 @@ const AdminDashboard = () => {
     }
   };
 
-  const systemAlerts = [
-    { id: 1, type: "warning", message: "High server load detected", time: "2 min ago" },
-    { id: 2, type: "info", message: "Backup completed successfully", time: "1 hour ago" },
-    { id: 3, type: "error", message: "Payment gateway timeout", time: "3 hours ago" },
-  ];
+  const [systemAlerts, setSystemAlerts] = useState([]);
+
+  useEffect(() => {
+    fetchSystemAlerts();
+  }, []);
+
+  const fetchSystemAlerts = async () => {
+    // Only show real system alerts from database or logs
+    setSystemAlerts([]);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -333,37 +338,8 @@ const AdminDashboard = () => {
                 <CardDescription>Recent reviews and suggestions</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 border border-border rounded-lg">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex text-yellow-400">
-                          {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-current" />
-                          ))}
-                        </div>
-                        <span className="font-medium">Sarah Johnson</span>
-                      </div>
-                      <span className="text-sm text-muted-foreground">2 hours ago</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">"The interview trainer is amazing! Really helped me prepare for my job interviews."</p>
-                  </div>
-                  
-                  <div className="p-4 border border-border rounded-lg">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex text-yellow-400">
-                          {[...Array(4)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-current" />
-                          ))}
-                          <Star className="w-4 h-4 text-muted" />
-                        </div>
-                        <span className="font-medium">Mike Chen</span>
-                      </div>
-                      <span className="text-sm text-muted-foreground">1 day ago</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">"Great platform overall. Would love to see more career paths in tech."</p>
-                  </div>
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">No feedback available yet.</p>
                 </div>
               </CardContent>
             </Card>
@@ -415,7 +391,7 @@ const AdminDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {systemAlerts.map((alert) => (
+                  {systemAlerts.length > 0 ? systemAlerts.map((alert) => (
                     <div key={alert.id} className={`flex items-center space-x-3 p-3 rounded-lg border ${
                       alert.type === 'error' ? 'border-destructive/30 bg-destructive/5' :
                       alert.type === 'warning' ? 'border-warning/30 bg-warning/5' :
@@ -423,13 +399,17 @@ const AdminDashboard = () => {
                     }`}>
                       {alert.type === 'error' && <AlertTriangle className="w-5 h-5 text-destructive" />}
                       {alert.type === 'warning' && <Clock className="w-5 h-5 text-warning" />}
-                      {alert.type === 'info' && <CheckCircle className="w-5 h-5 text-success" />}
+                      {alert.type === 'info' && <CheckCircle className="w-5 h-5 text-primary" />}
                       <div className="flex-1">
                         <p className="text-sm font-medium text-card-foreground">{alert.message}</p>
                         <p className="text-xs text-muted-foreground">{alert.time}</p>
                       </div>
                     </div>
-                  ))}
+                  )) : (
+                    <div className="text-center py-8">
+                      <p className="text-muted-foreground">No system alerts.</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
