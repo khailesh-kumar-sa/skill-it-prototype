@@ -130,6 +130,182 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_attempts: {
+        Row: {
+          answers: Json
+          created_at: string
+          id: string
+          passed: boolean
+          quiz_id: string
+          score: number
+          skill_offering_id: string | null
+          time_taken_seconds: number | null
+          user_id: string
+        }
+        Insert: {
+          answers: Json
+          created_at?: string
+          id?: string
+          passed: boolean
+          quiz_id: string
+          score: number
+          skill_offering_id?: string | null
+          time_taken_seconds?: number | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          passed?: boolean
+          quiz_id?: string
+          score?: number
+          skill_offering_id?: string | null
+          time_taken_seconds?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "skill_quizzes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_attempts_skill_offering_id_fkey"
+            columns: ["skill_offering_id"]
+            isOneToOne: false
+            referencedRelation: "skill_offerings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      skill_offerings: {
+        Row: {
+          approval_status: string | null
+          created_at: string
+          demo_video_approved: boolean | null
+          demo_video_url: string | null
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          level: string
+          max_learners: number | null
+          prerequisites: string | null
+          quiz_passed: boolean | null
+          skill_category: string
+          skill_name: string
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          approval_status?: string | null
+          created_at?: string
+          demo_video_approved?: boolean | null
+          demo_video_url?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          level: string
+          max_learners?: number | null
+          prerequisites?: string | null
+          quiz_passed?: boolean | null
+          skill_category: string
+          skill_name: string
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          approval_status?: string | null
+          created_at?: string
+          demo_video_approved?: boolean | null
+          demo_video_url?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          level?: string
+          max_learners?: number | null
+          prerequisites?: string | null
+          quiz_passed?: boolean | null
+          skill_category?: string
+          skill_name?: string
+          teacher_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      skill_quizzes: {
+        Row: {
+          created_at: string
+          id: string
+          passing_score: number | null
+          questions: Json
+          skill_category: string
+          skill_level: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          passing_score?: number | null
+          questions: Json
+          skill_category: string
+          skill_level: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          passing_score?: number | null
+          questions?: Json
+          skill_category?: string
+          skill_level?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      skill_requests: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          requested_date: string | null
+          requester_id: string
+          skill_offering_id: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          requested_date?: string | null
+          requester_id: string
+          skill_offering_id: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          requested_date?: string | null
+          requester_id?: string
+          skill_offering_id?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skill_requests_skill_offering_id_fkey"
+            columns: ["skill_offering_id"]
+            isOneToOne: false
+            referencedRelation: "skill_offerings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       skill_swap_sessions: {
         Row: {
           created_at: string
