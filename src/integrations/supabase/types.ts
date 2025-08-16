@@ -41,6 +41,56 @@ export type Database = {
         }
         Relationships: []
       }
+      peer_reviews: {
+        Row: {
+          communication_rating: number
+          created_at: string
+          id: string
+          is_teacher_review: boolean
+          knowledge_rating: number
+          overall_rating: number
+          reviewee_id: string
+          reviewer_id: string
+          session_id: string
+          teaching_rating: number
+          written_feedback: string | null
+        }
+        Insert: {
+          communication_rating: number
+          created_at?: string
+          id?: string
+          is_teacher_review?: boolean
+          knowledge_rating: number
+          overall_rating: number
+          reviewee_id: string
+          reviewer_id: string
+          session_id: string
+          teaching_rating: number
+          written_feedback?: string | null
+        }
+        Update: {
+          communication_rating?: number
+          created_at?: string
+          id?: string
+          is_teacher_review?: boolean
+          knowledge_rating?: number
+          overall_rating?: number
+          reviewee_id?: string
+          reviewer_id?: string
+          session_id?: string
+          teaching_rating?: number
+          written_feedback?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_reviews_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "skill_swap_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -80,11 +130,96 @@ export type Database = {
         }
         Relationships: []
       }
+      skill_swap_sessions: {
+        Row: {
+          created_at: string
+          duration_minutes: number
+          id: string
+          learner_id: string
+          session_date: string
+          skill_taught: string
+          status: string
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          learner_id: string
+          session_date: string
+          skill_taught: string
+          status?: string
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          learner_id?: string
+          session_date?: string
+          skill_taught?: string
+          status?: string
+          teacher_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      trust_scores: {
+        Row: {
+          avg_communication_rating: number | null
+          avg_knowledge_rating: number | null
+          avg_teaching_rating: number | null
+          completed_sessions: number
+          created_at: string
+          id: string
+          last_calculated: string
+          overall_score: number
+          total_reviews: number
+          trust_level: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avg_communication_rating?: number | null
+          avg_knowledge_rating?: number | null
+          avg_teaching_rating?: number | null
+          completed_sessions?: number
+          created_at?: string
+          id?: string
+          last_calculated?: string
+          overall_score?: number
+          total_reviews?: number
+          trust_level?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avg_communication_rating?: number | null
+          avg_knowledge_rating?: number | null
+          avg_teaching_rating?: number | null
+          completed_sessions?: number
+          created_at?: string
+          id?: string
+          last_calculated?: string
+          overall_score?: number
+          total_reviews?: number
+          trust_level?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      calculate_trust_score: {
+        Args: { target_user_id: string }
+        Returns: undefined
+      }
       check_mobile_trial_eligibility: {
         Args: { mobile_num: string }
         Returns: boolean

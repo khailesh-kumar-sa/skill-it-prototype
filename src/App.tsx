@@ -15,6 +15,7 @@ import Home from "./pages/Home";
 import CareerTest from "./pages/CareerTest";
 import SkillSwap from "./pages/SkillSwap";
 import InterviewTrainer from "./pages/InterviewTrainer";
+import MySessions from "./pages/MySession";
 import Profile from "./pages/Profile";
 import ProfileSetup from "./components/ProfileSetup";
 import NotFound from "./pages/NotFound";
@@ -44,6 +45,7 @@ const AppContent = () => {
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/career-test" element={<ProtectedRoute><CareerTest /></ProtectedRoute>} />
           <Route path="/skill-swap" element={<ProtectedRoute><SkillSwap /></ProtectedRoute>} />
+          <Route path="/my-sessions" element={<ProtectedRoute><MySessions /></ProtectedRoute>} />
           <Route path="/interview-trainer" element={<ProtectedRoute><InterviewTrainer /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
