@@ -347,7 +347,14 @@ const Profile = () => {
               This action cannot be undone. This will permanently delete your account and all associated data.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            <Button 
+              onClick={signOut}
+              variant="outline"
+              className="w-full"
+            >
+              Logout
+            </Button>
             <Button 
               onClick={() => setShowDeleteDialog(true)}
               variant="destructive"
