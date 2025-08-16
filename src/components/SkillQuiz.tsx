@@ -79,7 +79,7 @@ const SkillQuiz = ({ open, onOpenChange, skillCategory, skillLevel, onQuizComple
       if (error) throw error;
       const quizData = {
         ...data,
-        questions: Array.isArray(data.questions) ? data.questions as Question[] : []
+        questions: (data.questions as unknown) as Question[]
       };
       setQuiz(quizData);
       setSelectedAnswers(new Array(quizData.questions.length).fill(-1));

@@ -35,18 +35,28 @@ const SkillSwap = () => {
       // Load approved skill offerings
       const { data: skillsData, error: skillsError } = await supabase
         .from('skill_offerings')
-        .select('*, profiles!teacher_id(name), trust_scores!teacher_id(trust_level, overall_score, completed_sessions)')
+        .select('*')
         .eq('approval_status', 'approved');
 
       if (skillsError) throw skillsError;
 
-      const skillsWithProfiles = skillsData?.map(skill => ({
-        ...skill,
-        user_name: skill.profiles?.name || 'Unknown',
-        trust_level: skill.trust_scores?.trust_level || 'newbie',
-        overall_score: skill.trust_scores?.overall_score || 0,
-        completed_sessions: skill.trust_scores?.completed_sessions || 0
-      })) || [];
+      // Get teacher profiles and trust scores separately
+      const skillsWithProfiles = await Promise.all(
+        (skillsData || []).map(async (skill) => {
+          const [profileRes, trustRes] = await Promise.all([
+            supabase.from('profiles').select('name').eq('user_id', skill.teacher_id).single(),
+            supabase.from('trust_scores').select('trust_level, overall_score, completed_sessions').eq('user_id', skill.teacher_id).single()
+          ]);
+
+          return {
+            ...skill,
+            user_name: profileRes.data?.name || 'Unknown',
+            trust_level: trustRes.data?.trust_level || 'newbie',
+            overall_score: trustRes.data?.overall_score || 0,
+            completed_sessions: trustRes.data?.completed_sessions || 0
+          };
+        })
+      );
 
       setAvailableSkills(skillsWithProfiles);
 
@@ -54,34 +64,64 @@ const SkillSwap = () => {
       if (user) {
         const { data: requestsData, error: requestsError } = await supabase
           .from('skill_requests')
-          .select(`
-            *,
-            skill_offerings (skill_name, teacher_id),
-            profiles:skill_offerings.teacher_id (name)
-          `)
+          .select('*, skill_offerings(skill_name, teacher_id)')
           .eq('requester_id', user.id);
 
         if (requestsError) throw requestsError;
-        setMyRequests(requestsData || []);
+
+        // Get teacher names for requests
+        const requestsWithProfiles = await Promise.all(
+          (requestsData || []).map(async (request) => {
+            if (request.skill_offerings?.teacher_id) {
+              const profileRes = await supabase
+                .from('profiles')
+                .select('name')
+                .eq('user_id', request.skill_offerings.teacher_id)
+                .single();
+              
+              return {
+                ...request,
+                teacher_name: profileRes.data?.name || 'Unknown'
+              };
+            }
+            return request;
+          })
+        );
+
+        setMyRequests(requestsWithProfiles);
 
         // Load requests for user's skills
-        const { data: receivedData, error: receivedError } = await supabase
-          .from('skill_requests')
-          .select(`
-            *,
-            profiles:requester_id (name),
-            skill_offerings (skill_name)
-          `)
-          .in('skill_offering_id', 
-            await supabase
-              .from('skill_offerings')
-              .select('id')
-              .eq('teacher_id', user.id)
-              .then(res => res.data?.map(s => s.id) || [])
+        const { data: userSkills } = await supabase
+          .from('skill_offerings')
+          .select('id')
+          .eq('teacher_id', user.id);
+
+        if (userSkills && userSkills.length > 0) {
+          const { data: receivedData, error: receivedError } = await supabase
+            .from('skill_requests')
+            .select('*, skill_offerings(skill_name)')
+            .in('skill_offering_id', userSkills.map(s => s.id));
+
+          if (receivedError) throw receivedError;
+
+          // Get requester names
+          const receivedWithProfiles = await Promise.all(
+            (receivedData || []).map(async (request) => {
+              const profileRes = await supabase
+                .from('profiles')
+                .select('name')
+                .eq('user_id', request.requester_id)
+                .single();
+              
+              return {
+                ...request,
+                requester_name: profileRes.data?.name || 'Unknown'
+              };
+            })
           );
 
-        if (receivedError) throw receivedError;
-        setRequestsReceived(receivedData || []);
+          setRequestsReceived(receivedWithProfiles);
+        }
 
         // Load user's skill offerings
         const { data: offeringsData, error: offeringsError } = await supabase
@@ -347,7 +387,7 @@ const SkillSwap = () => {
                   <div className="flex justify-between items-center">
                     <div className="flex-1">
                       <h3 className="font-bold text-card-foreground text-lg">{request.skill_offerings?.skill_name}</h3>
-                      <p className="text-sm text-muted-foreground">Requested from {request.profiles?.name}</p>
+                      <p className="text-sm text-muted-foreground">Requested from {request.teacher_name}</p>
                       <p className="text-xs text-muted-foreground mt-1">{formatTimeAgo(request.created_at)}</p>
                       {request.message && (
                         <p className="text-sm mt-2 text-muted-foreground italic">"{request.message}"</p>
@@ -378,7 +418,7 @@ const SkillSwap = () => {
                 <CardContent className="p-6 space-y-4">
                   <div>
                     <h3 className="font-bold text-card-foreground text-lg">{request.skill_offerings?.skill_name}</h3>
-                    <p className="text-sm text-primary font-medium">From {request.profiles?.name}</p>
+                    <p className="text-sm text-primary font-medium">From {request.requester_name}</p>
                     {request.message && (
                       <p className="text-sm text-muted-foreground mt-2 italic">"{request.message}"</p>
                     )}
