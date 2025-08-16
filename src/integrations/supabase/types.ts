@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      free_trial_usage: {
+        Row: {
+          created_at: string
+          id: string
+          mobile_number: string
+          trial_expires_at: string
+          trial_started_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mobile_number: string
+          trial_expires_at?: string
+          trial_started_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mobile_number?: string
+          trial_expires_at?: string
+          trial_started_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -21,6 +48,7 @@ export type Database = {
           email: string | null
           id: string
           interests: string | null
+          mobile_number: string | null
           name: string
           role: string
           updated_at: string
@@ -32,6 +60,7 @@ export type Database = {
           email?: string | null
           id?: string
           interests?: string | null
+          mobile_number?: string | null
           name: string
           role: string
           updated_at?: string
@@ -43,6 +72,7 @@ export type Database = {
           email?: string | null
           id?: string
           interests?: string | null
+          mobile_number?: string | null
           name?: string
           role?: string
           updated_at?: string
@@ -55,6 +85,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_mobile_trial_eligibility: {
+        Args: { mobile_num: string }
+        Returns: boolean
+      }
       delete_user: {
         Args: Record<PropertyKey, never>
         Returns: undefined
