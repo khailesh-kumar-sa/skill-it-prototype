@@ -54,32 +54,31 @@ serve(async (req) => {
 
     console.log('Audio transcribed:', userAnswer);
 
-    // Now analyze the response
-    const analysisPrompt = `You are an expert interview coach and HR professional. Analyze this interview response comprehensively.
+    // Now analyze the response by comparing with the predefined ideal answer
+    const analysisPrompt = `You are an expert interview coach and HR professional. Analyze this interview response by comparing it directly with the provided ideal answer.
 
 Interview Question: ${question}
 Role Being Interviewed For: ${role}
 Candidate's Answer: ${userAnswer}
-Ideal Answer: ${idealAnswer}
+Predefined Ideal Answer: ${idealAnswer}
 
-Provide a detailed analysis comparing the candidate's answer to the ideal answer. Focus on:
+IMPORTANT: Compare the candidate's answer specifically against the predefined ideal answer provided above. This ideal answer contains the key points and approaches expected for this specific question and role.
 
-1. Content accuracy and relevance
-2. Communication clarity and structure
-3. Professional presentation
-4. Role-specific knowledge demonstration
-5. Areas for improvement
+Analyze the following:
+1. Content Accuracy: How well does the candidate's answer align with the key points in the ideal answer?
+2. Completeness: Did they cover the main topics mentioned in the ideal answer?
+3. Communication Quality: Clarity, structure, and professionalism
+4. Role-Specific Knowledge: Technical competence and industry understanding
+5. Areas for Improvement: What key points from the ideal answer were missed?
 
-Rate the following aspects on a scale where appropriate:
-- Overall Score (0-100)
-- Tone (Professional/Conversational/Needs Work)
-- Clarity (Excellent/Good/Needs Work)
-- Pronunciation (Clear/Mostly Clear/Unclear)
+Scoring criteria:
+- 90-100: Covers all key points from ideal answer with excellent presentation
+- 80-89: Covers most key points with good presentation
+- 70-79: Covers some key points but missing important elements
+- 60-69: Basic understanding but significant gaps compared to ideal answer
+- Below 60: Major deficiencies in content and presentation
 
-Provide specific feedback on:
-- What they did well
-- What could be improved
-- Specific corrections and better phrasing suggestions
+Provide specific feedback comparing their answer to the ideal answer and suggest improvements.
 
 Return your response in this exact JSON format:
 {
@@ -88,8 +87,8 @@ Return your response in this exact JSON format:
   "clarity": "Good",
   "pronunciation": "Clear",
   "userAnswer": "The candidate's transcribed answer",
-  "feedback": "Detailed feedback paragraph about their performance",
-  "corrections": "Specific suggestions for improvement and better phrasing"
+  "feedback": "Detailed feedback comparing their answer to the ideal answer provided",
+  "corrections": "Specific suggestions based on what was missing from the ideal answer"
 }`;
 
     const analysisResponse = await fetch('https://api.openai.com/v1/chat/completions', {
