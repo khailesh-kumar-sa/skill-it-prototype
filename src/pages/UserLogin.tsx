@@ -15,6 +15,7 @@ const UserLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -33,6 +34,15 @@ const UserLogin = () => {
       toast({
         title: "Please fill in all fields",
         description: "Email and password are required",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (isSignUp && !mobileNumber) {
+      toast({
+        title: "Mobile number required",
+        description: "Please enter your mobile number for account creation",
         variant: "destructive",
       });
       return;
@@ -60,6 +70,20 @@ const UserLogin = () => {
 
     try {
       if (isSignUp) {
+        // Check if mobile number has already been used for free trial
+        const { data: existingTrial } = await supabase.rpc('check_mobile_trial_eligibility', {
+          mobile_num: mobileNumber
+        });
+        
+        if (!existingTrial) {
+          toast({
+            title: "Mobile number already used",
+            description: "This mobile number has already been used for a free trial",
+            variant: "destructive",
+          });
+          return;
+        }
+
         const { error } = await signUp(email, password);
         if (error) {
           toast({
@@ -70,7 +94,7 @@ const UserLogin = () => {
         } else {
           toast({
             title: "🎉 Account created!",
-            description: "Please check your email to verify your account",
+            description: "Please check your email to verify your account. Your mobile number has been registered for trial tracking.",
           });
           setIsSignUp(false);
         }
@@ -267,9 +291,26 @@ const UserLogin = () => {
                 </div>
 
                 {isSignUp && (
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="text-sm font-semibold text-card-foreground">Confirm Password</Label>
-                    <div className="relative">
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="mobileNumber" className="text-sm font-semibold text-card-foreground">Mobile Number *</Label>
+                      <Input
+                        id="mobileNumber"
+                        type="tel"
+                        placeholder="+91 9876543210"
+                        value={mobileNumber}
+                        onChange={(e) => setMobileNumber(e.target.value)}
+                        className="h-12 border-2 border-input focus:border-primary transition-colors duration-200"
+                        required
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Mobile number is used for trial tracking and account verification
+                      </p>
+                    </div>
+                    
+                     <div className="space-y-2">
+                       <Label htmlFor="confirmPassword" className="text-sm font-semibold text-card-foreground">Confirm Password</Label>
+                       <div className="relative">
                       <Input
                         id="confirmPassword"
                         type={showConfirmPassword ? "text" : "password"}
@@ -285,10 +326,11 @@ const UserLogin = () => {
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-card-foreground"
                       >
                         {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                      </button>
-                    </div>
-                  </div>
-                )}
+                       </button>
+                       </div>
+                     </div>
+                   </>
+                 )}
                 
                 <Button 
                   type="submit" 

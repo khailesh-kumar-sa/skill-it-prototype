@@ -19,6 +19,7 @@ export interface ProfileData {
   role: string;
   interests: string;
   bio: string;
+  mobile_number?: string;
 }
 
 const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
@@ -28,7 +29,8 @@ const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
     name: '',
     role: '',
     interests: '',
-    bio: ''
+    bio: '',
+    mobile_number: ''
   });
 
   const careerRoles = [
@@ -64,7 +66,7 @@ const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
 
     try {
       // Save profile to database
-      const { error } = await supabase
+      const { error: profileError } = await supabase
         .from('profiles')
         .insert({
           user_id: user?.id,
@@ -72,10 +74,25 @@ const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
           role: profile.role,
           interests: profile.interests,
           bio: profile.bio,
-          email: user?.email
+          email: user?.email,
+          mobile_number: profile.mobile_number
         });
 
-      if (error) throw error;
+      if (profileError) throw profileError;
+
+      // Create free trial tracking entry if mobile number is provided
+      if (profile.mobile_number) {
+        const { error: trialError } = await supabase
+          .from('free_trial_usage')
+          .insert({
+            user_id: user?.id,
+            mobile_number: profile.mobile_number
+          });
+
+        if (trialError) {
+          console.error('Error creating trial tracking:', trialError);
+        }
+      }
 
       onComplete(profile);
       toast({
@@ -123,6 +140,20 @@ const ProfileSetup = ({ onComplete }: ProfileSetupProps) => {
                 disabled
                 className="bg-gray-50"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="mobile">Mobile Number</Label>
+              <Input
+                id="mobile"
+                type="tel"
+                value={profile.mobile_number}
+                onChange={(e) => setProfile({...profile, mobile_number: e.target.value})}
+                placeholder="+91 9876543210"
+              />
+              <p className="text-xs text-gray-500">
+                Used for trial tracking and account verification
+              </p>
             </div>
 
             <div className="space-y-2">
