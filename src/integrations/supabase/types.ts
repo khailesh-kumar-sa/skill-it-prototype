@@ -392,6 +392,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      approve_skill_offering: {
+        Args: { skill_id: string }
+        Returns: undefined
+      }
       calculate_trust_score: {
         Args: { target_user_id: string }
         Returns: undefined
