@@ -22,14 +22,18 @@ import {
   Download,
   UserPlus,
   MessageSquare,
-  Star
+  Star,
+  UserCheck
 } from "lucide-react";
+import UserApprovalModal from "@/components/UserApprovalModal";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const [pendingApprovals, setPendingApprovals] = useState(0);
 
   const handleLogout = () => {
     toast({
@@ -63,6 +67,8 @@ const AdminDashboard = () => {
 
       // Calculate real stats
       const totalUsers = profiles?.length || 0;
+      const approvedUsers = profiles?.filter(profile => profile.approved).length || 0;
+      const pendingUsers = profiles?.filter(profile => !profile.approved).length || 0;
       const activeUsers = profiles?.filter(profile => 
         new Date(profile.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
       ).length || 0;
@@ -71,18 +77,20 @@ const AdminDashboard = () => {
       ).length || 0;
 
       setStats({
-        totalUsers,
+        totalUsers: approvedUsers, // Only count approved users
         activeUsers,
         newSignups,
-        revenue: totalUsers * 29 // Estimated revenue based on subscription
+        revenue: approvedUsers * 29 // Estimated revenue based on subscription
       });
 
-      // Set recent users data
-      setRecentUsers(profiles?.slice(0, 10).map(profile => ({
+      setPendingApprovals(pendingUsers);
+
+      // Set recent users data (only approved users)
+      setRecentUsers(profiles?.filter(profile => profile.approved).slice(0, 10).map(profile => ({
         id: profile.id,
         name: profile.name,
         email: profile.email,
-        status: 'active',
+        status: profile.approved ? 'active' : 'pending',
         joinDate: new Date(profile.created_at).toLocaleDateString()
       })) || []);
     } catch (error) {
@@ -242,6 +250,21 @@ const AdminDashboard = () => {
                     <Button variant="outline" size="sm">
                       <Download className="w-4 h-4 mr-2" />
                       Export
+                    </Button>
+                    <Button 
+                      onClick={() => setShowApprovalModal(true)}
+                      className="relative"
+                    >
+                      <UserCheck className="w-4 h-4 mr-2" />
+                      Approve Users
+                      {pendingApprovals > 0 && (
+                        <Badge 
+                          variant="destructive" 
+                          className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                        >
+                          {pendingApprovals}
+                        </Badge>
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -416,6 +439,11 @@ const AdminDashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      <UserApprovalModal 
+        open={showApprovalModal} 
+        onOpenChange={setShowApprovalModal} 
+      />
     </div>
   );
 };

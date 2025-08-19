@@ -40,13 +40,18 @@ const SkillSwap = () => {
 
       if (skillsError) throw skillsError;
 
-      // Get teacher profiles and trust scores separately
+      // Get teacher profiles and trust scores for approved users only
       const skillsWithProfiles = await Promise.all(
         (skillsData || []).map(async (skill) => {
           const [profileRes, trustRes] = await Promise.all([
-            supabase.from('profiles').select('name').eq('user_id', skill.teacher_id).single(),
+            supabase.from('profiles').select('name, approved').eq('user_id', skill.teacher_id).single(),
             supabase.from('trust_scores').select('trust_level, overall_score, completed_sessions').eq('user_id', skill.teacher_id).single()
           ]);
+
+          // Only include skills from approved users
+          if (!profileRes.data?.approved) {
+            return null;
+          }
 
           return {
             ...skill,
@@ -58,7 +63,10 @@ const SkillSwap = () => {
         })
       );
 
-      setAvailableSkills(skillsWithProfiles);
+      // Filter out null values (unapproved users)
+      const approvedSkills = skillsWithProfiles.filter(skill => skill !== null);
+
+      setAvailableSkills(approvedSkills);
 
       // Load user's skill requests
       if (user) {

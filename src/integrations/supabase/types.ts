@@ -93,6 +93,9 @@ export type Database = {
       }
       profiles: {
         Row: {
+          approved: boolean | null
+          approved_at: string | null
+          approved_by: string | null
           bio: string | null
           created_at: string
           email: string | null
@@ -105,6 +108,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          approved?: boolean | null
+          approved_at?: string | null
+          approved_by?: string | null
           bio?: string | null
           created_at?: string
           email?: string | null
@@ -117,6 +123,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          approved?: boolean | null
+          approved_at?: string | null
+          approved_by?: string | null
           bio?: string | null
           created_at?: string
           email?: string | null
