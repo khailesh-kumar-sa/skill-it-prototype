@@ -34,6 +34,95 @@ const SKILL_CATEGORIES = [
   'Other'
 ];
 
+const ROLE_OPTIONS = {
+  'Programming': [
+    'Junior Software Developer',
+    'Full Stack Developer', 
+    'Frontend Developer',
+    'Backend Developer',
+    'Mobile App Developer',
+    'DevOps Engineer',
+    'Software Architect',
+    'Tech Lead'
+  ],
+  'Design': [
+    'UI/UX Designer',
+    'Graphic Designer',
+    'Product Designer',
+    'Web Designer',
+    'Motion Graphics Designer',
+    'Creative Director'
+  ],
+  'Marketing': [
+    'Digital Marketing Specialist',
+    'Social Media Manager',
+    'Content Marketing Manager',
+    'SEO Specialist',
+    'Marketing Manager',
+    'Brand Manager'
+  ],
+  'Business': [
+    'Business Analyst',
+    'Product Manager',
+    'Project Manager',
+    'Consultant',
+    'Operations Manager',
+    'Strategy Manager'
+  ],
+  'Languages': [
+    'Language Teacher',
+    'Translator',
+    'Interpreter',
+    'Content Writer',
+    'Localization Specialist'
+  ],
+  'Music': [
+    'Music Teacher',
+    'Sound Engineer',
+    'Music Producer',
+    'Composer',
+    'Audio Technician'
+  ],
+  'Art': [
+    'Art Teacher',
+    'Illustrator',
+    'Art Director',
+    'Concept Artist',
+    'Visual Artist'
+  ],
+  'Writing': [
+    'Content Writer',
+    'Technical Writer',
+    'Copywriter',
+    'Editor',
+    'Journalist'
+  ],
+  'Photography': [
+    'Photographer',
+    'Photo Editor',
+    'Visual Content Creator',
+    'Photography Instructor'
+  ],
+  'Cooking': [
+    'Chef',
+    'Culinary Instructor',
+    'Food Stylist',
+    'Restaurant Manager'
+  ],
+  'Fitness': [
+    'Personal Trainer',
+    'Fitness Instructor',
+    'Sports Coach',
+    'Wellness Coach'
+  ],
+  'Other': [
+    'Instructor',
+    'Trainer',
+    'Specialist',
+    'Expert'
+  ]
+};
+
 const AddSkillModal = ({ open, onOpenChange, onSkillAdded }: AddSkillModalProps) => {
   const { user } = useAuth();
   const [step, setStep] = useState(1); // 1: Form, 2: Quiz, 3: Video, 4: Review
@@ -46,6 +135,7 @@ const AddSkillModal = ({ open, onOpenChange, onSkillAdded }: AddSkillModalProps)
     duration_minutes: 60,
     max_learners: 1
   });
+  const [selectedRole, setSelectedRole] = useState('');
   const [quizPassed, setQuizPassed] = useState(false);
   const [quizScore, setQuizScore] = useState(0);
   const [demoVideoFile, setDemoVideoFile] = useState<File | null>(null);
@@ -55,6 +145,10 @@ const AddSkillModal = ({ open, onOpenChange, onSkillAdded }: AddSkillModalProps)
 
   const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Reset role when category changes
+    if (field === 'skill_category') {
+      setSelectedRole('');
+    }
   };
 
   const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,6 +182,14 @@ const AddSkillModal = ({ open, onOpenChange, onSkillAdded }: AddSkillModalProps)
       toast({
         title: "Category required",
         description: "Please select a skill category",
+        variant: "destructive"
+      });
+      return false;
+    }
+    if (!selectedRole) {
+      toast({
+        title: "Role required",
+        description: "Please select your target role",
         variant: "destructive"
       });
       return false;
@@ -204,6 +306,7 @@ const AddSkillModal = ({ open, onOpenChange, onSkillAdded }: AddSkillModalProps)
       duration_minutes: 60,
       max_learners: 1
     });
+    setSelectedRole('');
     setQuizPassed(false);
     setQuizScore(0);
     setDemoVideoFile(null);
@@ -313,6 +416,28 @@ const AddSkillModal = ({ open, onOpenChange, onSkillAdded }: AddSkillModalProps)
                 />
               </div>
 
+              {/* Role Selection */}
+              <div className="space-y-2">
+                <Label htmlFor="role">Target Role *</Label>
+                <Select 
+                  value={selectedRole} 
+                  onValueChange={setSelectedRole}
+                  disabled={!formData.skill_category}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your target role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {formData.skill_category && ROLE_OPTIONS[formData.skill_category as keyof typeof ROLE_OPTIONS]?.map(role => (
+                      <SelectItem key={role} value={role}>{role}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  Quiz questions will be tailored to this specific role
+                </p>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="prerequisites">Prerequisites (Optional)</Label>
                 <Textarea
@@ -412,7 +537,7 @@ const AddSkillModal = ({ open, onOpenChange, onSkillAdded }: AddSkillModalProps)
               <Card>
                 <CardHeader>
                   <CardTitle>{formData.skill_name}</CardTitle>
-                  <CardDescription>{formData.skill_category} • {formData.level}</CardDescription>
+                  <CardDescription>{formData.skill_category} • {formData.level} • {selectedRole}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm">{formData.description}</p>
@@ -485,6 +610,7 @@ const AddSkillModal = ({ open, onOpenChange, onSkillAdded }: AddSkillModalProps)
         onOpenChange={setShowQuiz}
         skillCategory={formData.skill_category}
         skillLevel={formData.level}
+        targetRole={selectedRole}
         onQuizCompleted={handleQuizCompleted}
       />
     </>

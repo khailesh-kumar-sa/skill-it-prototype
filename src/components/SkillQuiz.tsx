@@ -28,10 +28,11 @@ interface SkillQuizProps {
   onOpenChange: (open: boolean) => void;
   skillCategory: string;
   skillLevel: string;
+  targetRole?: string;
   onQuizCompleted: (passed: boolean, score: number) => void;
 }
 
-const SkillQuiz = ({ open, onOpenChange, skillCategory, skillLevel, onQuizCompleted }: SkillQuizProps) => {
+const SkillQuiz = ({ open, onOpenChange, skillCategory, skillLevel, targetRole, onQuizCompleted }: SkillQuizProps) => {
   const { user } = useAuth();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -69,6 +70,7 @@ const SkillQuiz = ({ open, onOpenChange, skillCategory, skillLevel, onQuizComple
   const loadQuiz = async () => {
     setLoading(true);
     try {
+      // First try to load existing quiz
       const { data, error } = await supabase
         .from('skill_quizzes')
         .select('*')
@@ -76,22 +78,67 @@ const SkillQuiz = ({ open, onOpenChange, skillCategory, skillLevel, onQuizComple
         .eq('skill_level', skillLevel)
         .single();
 
-      if (error) throw error;
-      const quizData = {
-        ...data,
-        questions: (data.questions as unknown) as Question[]
-      };
-      setQuiz(quizData);
-      setSelectedAnswers(new Array(quizData.questions.length).fill(-1));
+      if (data && !error) {
+        const quizData = {
+          ...data,
+          questions: (data.questions as unknown) as Question[]
+        };
+        setQuiz(quizData);
+        setSelectedAnswers(new Array(quizData.questions.length).fill(-1));
+      } else {
+        // If no quiz exists, generate AI-powered quiz
+        await generateAIQuiz();
+      }
     } catch (error) {
       console.error('Error loading quiz:', error);
+      // Try AI generation as fallback
+      await generateAIQuiz();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateAIQuiz = async () => {
+    try {
+      // Generate 5 questions using AI
+      const questions: Question[] = [];
+      
+      for (let i = 0; i < 5; i++) {
+        const response = await supabase.functions.invoke('generate-quiz-question', {
+          body: {
+            skillCategory,
+            skillLevel,
+            targetRole: targetRole || 'General',
+            questionNumber: i + 1
+          }
+        });
+
+        if (response.data && !response.error) {
+          questions.push(response.data);
+        }
+      }
+
+      if (questions.length > 0) {
+        const aiQuiz: Quiz = {
+          id: `ai-quiz-${Date.now()}`,
+          skill_category: skillCategory,
+          skill_level: skillLevel,
+          questions,
+          passing_score: 70
+        };
+        
+        setQuiz(aiQuiz);
+        setSelectedAnswers(new Array(questions.length).fill(-1));
+      } else {
+        throw new Error('Failed to generate quiz questions');
+      }
+    } catch (error) {
+      console.error('Error generating AI quiz:', error);
       toast({
         title: "Error loading quiz",
         description: "Please try again later",
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
     }
   };
 
