@@ -52,21 +52,27 @@ Skill-It targets a wide range of users and is tailored for the following user se
 
 4)Mentors & Coaches (30-50): Wanting to offer guidance and share skills.
 
-5)
-HR Professionals & Recruiters (30-50): Looking for skilled talent and training platforms.
+5)HR Professionals & Recruiters (30-50): Looking for skilled talent and training platforms.
 
 This audience is focused on career growth, skill-building, and networking.
 ****
 ## Future Scope:
 ## Future upgrades to Skill It will include:
-Deaf-Friendly Video Courses: Adding real-time deaf transcription overlays (bottom-right corner) for course videos to improve accessibility.
-Multilingual Support: Support for regional languages to expand reach across India and eliminate language barriers.
-Advanced Interview Simulations: Introducing video-based mock interviews with AI feedback on tone, confidence, and posture.
-Placement Integrations: Collaborating with companies and placement cells for real-world job opportunities
-Gamified Learning: Adding badges, streaks, and challenge-based progress to boost engagement.
-Skill Certificates: AI-evaluated micro-certifications based on completed swaps or training modules
-Addition of Non-technical skills: Allowing users also to swap and learn non-technical skills like music, online learnable games and other skills.
-We are also planning to use tokens to provide gift vouchers of various applications to boost the encourgement more
+1)Deaf-Friendly Video Courses: Adding real-time deaf transcription overlays (bottom-right corner) for course videos to improve accessibility.
+
+2)Multilingual Support: Support for regional languages to expand reach across India and eliminate language barriers.
+
+3)Advanced Interview Simulations: Introducing video-based mock interviews with AI feedback on tone, confidence, and posture.
+
+4)Placement Integrations: Collaborating with companies and placement cells for real-world job opportunities
+
+5)Gamified Learning: Adding badges, streaks, and challenge-based progress to boost engagement.
+
+6)Skill Certificates: AI-evaluated micro-certifications based on completed swaps or training modules
+
+6)Addition of Non-technical skills: Allowing users also to swap and learn non-technical skills like music, online learnable games and other skills.
+
+7)We are also planning to use tokens to provide gift vouchers of various applications to boost the encourgement more
 ****
 ## Links :
 ## Prototype Link - https://skill-it.lovable.app/
