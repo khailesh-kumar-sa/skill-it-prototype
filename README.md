@@ -36,10 +36,10 @@ Passed internal tests
 Uploaded proof (certs, portfolio, demos)
 Score directly affects profile visibility in search results.
 ****
-## Encouragement to teach and learn via token rewarding system (Currently in ideation stage):
+## Encouragement to teach and learn via token rewarding system:
 Users will get 10 tokens (for eg.) for successful completion of 1 session of teaching and 5 tokens (for eg.) for successful completion of 1 session of learning.
 And these credits can be used to access hig profiles Users who are expertise in the field.
-This helps to boost the encouragement of users to teach as well as learn.
+This helps to boost the encouragement of users to teach as well as learn. This tokens will be used to access tier 3 users which will encourage users to earn more tokens by learning and teaching.
 ****
 ## Target Audience:
 Skill-It targets a wide range of users and is tailored for the following user segments:
