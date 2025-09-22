@@ -43,16 +43,22 @@ This helps to boost the encouragement of users to teach as well as learn.
 ****
 ## Target Audience:
 Skill-It targets a wide range of users and is tailored for the following user segments:
-Students & Graduates (18-25): Seeking career guidance, mentorship, and interview preparation.****
-Working Professionals (25-40): Looking to upskill, switch careers, or enhance job prospects.
-Job Seekers (22-40): In need of interview coaching and career direction.****
-Mentors & Coaches (30-50): Wanting to offer guidance and share skills.****
+
+1)Students & Graduates (18-25): Seeking career guidance, mentorship, and interview preparation.
+
+2)Working Professionals (25-40): Looking to upskill, switch careers, or enhance job prospects.
+
+3)Job Seekers (22-40): In need of interview coaching and career direction.
+
+4)Mentors & Coaches (30-50): Wanting to offer guidance and share skills.
+
+5)
 HR Professionals & Recruiters (30-50): Looking for skilled talent and training platforms.
 
 This audience is focused on career growth, skill-building, and networking.
 ****
 ## Future Scope:
-# Future upgrades to Skill It will include:
+## Future upgrades to Skill It will include:
 Deaf-Friendly Video Courses: Adding real-time deaf transcription overlays (bottom-right corner) for course videos to improve accessibility.
 Multilingual Support: Support for regional languages to expand reach across India and eliminate language barriers.
 Advanced Interview Simulations: Introducing video-based mock interviews with AI feedback on tone, confidence, and posture.
@@ -63,23 +69,23 @@ Addition of Non-technical skills: Allowing users also to swap and learn non-tech
 We are also planning to use tokens to provide gift vouchers of various applications to boost the encourgement more
 ****
 ## Links :
-# Prototype Link - https://skill-it.lovable.app/
-# Drive link (ppt, updation screenshots from prototype and research paper) - https://drive.google.com/drive/folders/1HICR-lLrBRi02yujAvyCBbq1mKMpHppt?usp=drive_link
-# Demo video link - (NOTE: This is a working prototype and not an advanced featured launch ready Application .Full project is continously under development refing and redifing for users so also i will keep updating it.)
+## Prototype Link - https://skill-it.lovable.app/
+## Drive link (ppt, updation screenshots from prototype and research paper) - https://drive.google.com/drive/folders/1HICR-lLrBRi02yujAvyCBbq1mKMpHppt?usp=drive_link
+## Demo video link - (NOTE: This is a working prototype and not an advanced featured launch ready Application .Full project is continously under development refing and redifing for users so also i will keep updating it.)
 https://youtu.be/Tihb0RATAMY
-# Pitch Link -
+## Pitch Link -
 https://www.youtube.com/watch?v=gNEhGMUFnQE
 ****
 ## Research:
 Skill-IT Competitive Landscape & Differentiation Report
-# Executive Overview:
+## Executive Overview:
 Skill-IT is a peer learning and career-readiness platform that lets students teach and learn from each other, earn tokens for teaching, validate expertise with lightweight proof (portfolio, demo micro-lessons, badges), and practice interviews with AI—while keeping costs near zero. It sits at the intersection of skill-swap/barter communities, mentorship networks, MOOCs, and interview-prep tools.
-# Existing Approaches:
+## Existing Approaches:
 Skill-Swap & Barter Platforms:
 Simbi, TimeRepublik, Barterchain enable people to exchange skills or services without money. These create communities where users “pay” with time or credits, but they mostly lack structured validation of skill quality or integration with career growth tools.
-# Mentorship Networks:
+## Mentorship Networks:
 ADPList and similar platforms connect learners to mentors worldwide. They focus heavily on one-on-one guidance from experienced professionals. However, these are typically mentorship-only and don’t emphasize peer-to-peer learning or reciprocity.
-# Mock Interview Tools:
+## Mock Interview Tools:
 Pramp, Exponent, Google Interview Warmup provide AI-based or peer-based mock interview practice. While useful for job seekers, they are single-purpose tools and don’t integrate with a broader skill development or learning ecosystem.
 MOOCs & Credential Platforms:
 Coursera, LinkedIn Learning, edX deliver structured online courses and certifications, often from universities or corporates. They offer credibility and breadth of content but are usually expensive, one-way (teacher → learner), and not peer-driven.
