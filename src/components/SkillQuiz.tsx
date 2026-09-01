@@ -50,7 +50,7 @@ const SkillQuiz = ({ open, onOpenChange, skillCategory, skillLevel, targetRole, 
   }, [open, skillCategory, skillLevel]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
     if (quizStarted && !quizCompleted && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft(prev => {

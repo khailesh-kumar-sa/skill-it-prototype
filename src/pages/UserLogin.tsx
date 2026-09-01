@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Phone, Mail, ArrowRight, Shield, User, UserPlus } from "lucide-react";
+import { Eye, EyeOff, Phone, Mail, ArrowRight, Shield, User, UserPlus, KeyRound } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const UserLogin = () => {
+  const demoEmail = 'demo@skillit.com';
+  const demoPassword = 'SkillItDemo2026!';
   const navigate = useNavigate();
   const { user, signIn, signUp, loading } = useAuth();
   const [email, setEmail] = useState('');
@@ -150,6 +152,43 @@ const UserLogin = () => {
     }
   };
 
+  const handleDemoLogin = async () => {
+    setIsLoading(true);
+
+    try {
+      const { error: provisionError } = await supabase.functions.invoke('ensure-demo-user');
+
+      if (provisionError) {
+        throw provisionError;
+      }
+
+      const { error } = await signIn(demoEmail, demoPassword);
+
+      if (error) {
+        toast({
+          title: "Demo sign-in failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Demo workspace ready",
+        description: "You are signed in with the shared demo user.",
+      });
+      navigate('/home');
+    } catch (error) {
+      toast({
+        title: "Demo account unavailable",
+        description: "Please try again in a moment.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-accent to-premium">
@@ -215,6 +254,32 @@ const UserLogin = () => {
                   <span>Continue with Google</span>
                 </div>
               </Button>
+
+              {!isSignUp && (
+                <div className="space-y-3 rounded-lg border border-accent/30 bg-accent/5 p-4">
+                  <div className="flex items-start gap-3">
+                    <KeyRound className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                    <div className="min-w-0">
+                      <p className="font-semibold text-card-foreground">Try the demo workspace</p>
+                      <p className="text-sm text-muted-foreground">Explore the signed-in experience without creating an account.</p>
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleDemoLogin}
+                    disabled={isLoading}
+                    className="w-full border-accent/40 hover:bg-accent/10"
+                  >
+                    <KeyRound className="mr-2 h-4 w-4" />
+                    {isLoading ? 'Preparing demo account...' : 'Sign in as demo user'}
+                  </Button>
+                  <div className="grid gap-1 text-xs text-muted-foreground sm:grid-cols-2 sm:gap-3">
+                    <span>Email: <code className="text-card-foreground">{demoEmail}</code></span>
+                    <span>Password: <code className="text-card-foreground">{demoPassword}</code></span>
+                  </div>
+                </div>
+              )}
               
               {/* Divider */}
               <div className="relative">

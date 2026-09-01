@@ -62,13 +62,15 @@ const InterviewTrainer = () => {
   };
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (isRecording) {
       interval = setInterval(() => {
         setRecordingTime(prev => prev + 1);
       }, 1000);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isRecording]);
 
   const formatTime = (seconds: number) => {

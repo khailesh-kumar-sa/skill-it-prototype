@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.4"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -401,10 +401,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      approve_skill_offering: {
-        Args: { skill_id: string }
-        Returns: undefined
-      }
+      approve_skill_offering: { Args: { skill_id: string }; Returns: undefined }
       calculate_trust_score: {
         Args: { target_user_id: string }
         Returns: undefined
@@ -413,10 +410,7 @@ export type Database = {
         Args: { mobile_num: string }
         Returns: boolean
       }
-      delete_user: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      delete_user: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
